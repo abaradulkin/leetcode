@@ -19,7 +19,7 @@ class Solution:
         "I": 1
     }
 
-    def romanToInt(self, s: str) -> int:
+    def roman_to_int(self, s: str) -> int:
         result = 0
         for symbol in self.symbols.keys():
             while s:
@@ -30,9 +30,41 @@ class Solution:
         return result
 
 
+class SolutionOptimized:
+    symbols = {
+        "M": 1000,
+        "D": 500,
+        "C": 100,
+        "L": 50,
+        "X": 10,
+        "V": 5,
+        "I": 1
+    }
+
+    def roman_to_int(self, s: str) -> int:
+        result, previous = 0, 0
+        for i in range(len(s) - 1):
+            candidate = self.symbols[s[i]]
+            next = self.symbols[s[i + 1]]
+            if candidate < next:
+                result -= candidate
+            else:
+                result += candidate
+        result += self.symbols[s[-1]]
+        return result
+
+
 @pytest.mark.parametrize("input,output", (("III", 3),
                                           ("LVIII", 58),
                                           ("MCMXCIV", 1994)))
 def test_main_function(input, output):
     sol = Solution()
-    assert sol.romanToInt(input) == output
+    assert sol.roman_to_int(input) == output
+
+
+@pytest.mark.parametrize("input,output", (("III", 3),
+                                          ("LVIII", 58),
+                                          ("MCMXCIV", 1994)))
+def test_optimized_function(input, output):
+    sol = SolutionOptimized()
+    assert sol.roman_to_int(input) == output
